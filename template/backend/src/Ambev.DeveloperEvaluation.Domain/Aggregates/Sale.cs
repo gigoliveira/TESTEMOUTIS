@@ -11,15 +11,25 @@ namespace Ambev.DeveloperEvaluation.Domain.Aggregates
     {
         public Guid Id { get; }
         public Guid CustomerId { get; }
-        public List<SaleItem> Items { get; }
+        public List<SaleItem> Items { get; private set; }
         public SaleStatus Status { get; }
 
-        public Sale(Guid id, Guid customerId, List<SaleItem> items, SaleStatus status)
+        public Sale(Guid customerId)
         {
-            Id = id;
+            Id = Guid.NewGuid();
             CustomerId = customerId;
-            Items = items;
-            Status = status;
+            Items = new List<SaleItem>();
+            Status = SaleStatus.Pending;
+        }
+
+        public void AddItem(SaleItem item)
+        {
+            if (Status == SaleStatus.Confirmed || Status == SaleStatus.Cancelled)
+            {
+                throw new InvalidOperationException("Cannot add items to a completed sale.");
+            }
+
+            Items.Add(item);
         }
     }
 }
