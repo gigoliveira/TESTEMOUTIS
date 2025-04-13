@@ -11,6 +11,7 @@ namespace Ambev.DeveloperEvaluation.Domain.Aggregates
     {
         public ProductSnapshot Product { get; }
         public int Quantity { get; }
+        public decimal TotalValue => Product.Price * Quantity;
 
         public SaleItem(ProductSnapshot product, int quantity)
         {
