@@ -38,4 +38,9 @@
 		<ProjectReference Include="..\..\src\Ambev.DeveloperEvaluation.ORM\Ambev.DeveloperEvaluation.ORM.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Domain\NovaPasta\" />
+	  <Folder Include="Domain\ValueObjects\" />
+	</ItemGroup>
+
 </Project>
