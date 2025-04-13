@@ -12,7 +12,7 @@ namespace Ambev.DeveloperEvaluation.Domain.Aggregates
         public Guid Id { get; }
         public Guid CustomerId { get; }
         public List<SaleItem> Items { get; private set; }
-        public SaleStatus Status { get; }
+        public SaleStatus Status { get; private set; }
 
         public Sale(Guid customerId)
         {
@@ -24,12 +24,23 @@ namespace Ambev.DeveloperEvaluation.Domain.Aggregates
 
         public void AddItem(SaleItem item)
         {
-            if (Status == SaleStatus.Confirmed || Status == SaleStatus.Cancelled)
+            if (Status == SaleStatus.Completed || Status == SaleStatus.Cancelled)
             {
                 throw new InvalidOperationException("Cannot add items to a completed sale.");
             }
 
             Items.Add(item);
         }
+
+        public void Cancel()
+        {
+            if (Status == SaleStatus.Completed)
+            {
+                throw new InvalidOperationException("A completed sale cannot be cancelled.");
+            }
+
+            Status = SaleStatus.Cancelled;
+        }
     }
 }
+
