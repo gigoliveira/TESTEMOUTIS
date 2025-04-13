@@ -48,7 +48,7 @@ namespace Ambev.DeveloperEvaluation.Unit.Domain.Validation.ValueObjects
         public void Given_InvalidProductName_When_Validated_Then_ShouldThrowValidationException()
         {
             // Arrange
-            var invalidProductSnapshot = new ProductSnapshot("valid-id", "", 100); // Invalid product name (empty string)
+            var invalidProductSnapshot = new ProductSnapshot(Guid.NewGuid(), "", 100);
 
             // Act
             var validationResult = _validator.Validate(invalidProductSnapshot);

@@ -23,7 +23,7 @@ namespace Ambev.DeveloperEvaluation.Unit.Domain.Validation.Aggregates
             // Arrange
             var items = new List<SaleItem>
             {
-                new SaleItem(new ProductSnapshot(Guid.NewGuid().ToString(), "Product A", 100), 2)
+                new SaleItem(new ProductSnapshot(Guid.NewGuid(), "Product A", 100), 2)
             };
             var sale = new Sale(Guid.NewGuid(), Guid.NewGuid(), items, SaleStatus.Pending);
             var validator = new SaleValidator();

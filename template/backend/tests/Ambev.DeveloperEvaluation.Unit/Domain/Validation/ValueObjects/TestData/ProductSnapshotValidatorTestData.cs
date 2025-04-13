@@ -11,7 +11,7 @@ namespace Ambev.DeveloperEvaluation.Unit.Domain.Validation.ValueObjects.TestData
     public static class ProductSnapshotValidatorTestData
     {
         private static readonly Faker<ProductSnapshot> ProductFaker = new Faker<ProductSnapshot>()
-            .RuleFor(u => u.ExternalProductId, f => f.Commerce.Product())
+            .RuleFor(u => u.ExternalProductId, Guid.NewGuid())
             .RuleFor(u => u.ProductName, f => f.Commerce.ProductName())
             .RuleFor(u => u.Price, f => f.Finance.Amount(0.01m, 10000.00m));
 
