@@ -6,6 +6,14 @@
 
 		<IsPackable>false</IsPackable>
 	</PropertyGroup>
+	<ItemGroup>
+	  <Compile Remove="Domain\NovaPasta\**" />
+	  <Compile Remove="Domain\ValueObjects\**" />
+	  <EmbeddedResource Remove="Domain\NovaPasta\**" />
+	  <EmbeddedResource Remove="Domain\ValueObjects\**" />
+	  <None Remove="Domain\NovaPasta\**" />
+	  <None Remove="Domain\ValueObjects\**" />
+	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
@@ -36,11 +44,6 @@
 		<ProjectReference Include="..\..\src\Ambev.DeveloperEvaluation.Domain\Ambev.DeveloperEvaluation.Domain.csproj" />
 		<ProjectReference Include="..\..\src\Ambev.DeveloperEvaluation.Application\Ambev.DeveloperEvaluation.Application.csproj" />
 		<ProjectReference Include="..\..\src\Ambev.DeveloperEvaluation.ORM\Ambev.DeveloperEvaluation.ORM.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Domain\NovaPasta\" />
-	  <Folder Include="Domain\ValueObjects\" />
 	</ItemGroup>
 
 </Project>

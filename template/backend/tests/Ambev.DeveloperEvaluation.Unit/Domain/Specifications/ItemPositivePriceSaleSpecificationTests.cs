@@ -6,7 +6,7 @@ using Ambev.DeveloperEvaluation.Domain.ValueObjects;
 
 namespace Ambev.DeveloperEvaluation.Unit.Domain.Specifications
 {
-    public class SaleItemPositivePriceSpecificationTests
+    public class ItemPositivePriceSaleSpecificationTests
     {
         // Given a valid price
         // When validated
