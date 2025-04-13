@@ -7,7 +7,7 @@ namespace Ambev.DeveloperEvaluation.Domain.Validation.ProductSnapshotValidations
     {
         public ProductSnapshotValidator()
         {
-            RuleFor(x => x.ProductId)
+            RuleFor(x => x.ExternalProductId)
                 .NotEmpty().WithMessage("Product Id cannot be empty");
 
             RuleFor(x => x.ProductName)

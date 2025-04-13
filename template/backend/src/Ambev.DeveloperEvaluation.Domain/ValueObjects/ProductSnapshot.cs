@@ -8,7 +8,7 @@ namespace Ambev.DeveloperEvaluation.Domain.ValueObjects
 {
     public class ProductSnapshot
     {
-        public string ProductId { get; private set; }
+        public string ExternalProductId { get; private set; }
         public string ProductName { get; private set; }
         public decimal Price { get; private set; }
 
@@ -16,9 +16,9 @@ namespace Ambev.DeveloperEvaluation.Domain.ValueObjects
         {
             
         }
-        public ProductSnapshot(string productId, string productName, decimal price)
+        public ProductSnapshot(string externalProductId, string productName, decimal price)
         {
-            ProductId = productId;
+            ExternalProductId = externalProductId;
             ProductName = productName;
             Price = price;
         }
