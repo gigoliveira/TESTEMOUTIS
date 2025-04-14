@@ -15,7 +15,7 @@ namespace Ambev.DeveloperEvaluation.Unit.Domain.Specifications
         public void Given_SaleWithValidStatus_When_Validated_Then_ShouldPassSpecification()
         {
             // Arrange
-            var sale = new Sale(Guid.NewGuid());
+            var sale = new Sale(Guid.NewGuid(), Guid.NewGuid());
 
             // Act
             var specification = new ValidStatusSpecification();
@@ -32,7 +32,7 @@ namespace Ambev.DeveloperEvaluation.Unit.Domain.Specifications
         public void Given_SaleWithInvalidStatus_When_Validated_Then_ShouldFailSpecification()
         {
             // Arrange
-            var sale = new Sale(Guid.NewGuid()); // assuming Cancelled is invalid for the example
+            var sale = new Sale(Guid.NewGuid(), Guid.NewGuid()); // assuming Cancelled is invalid for the example
             sale.Cancel();
 
             // Act

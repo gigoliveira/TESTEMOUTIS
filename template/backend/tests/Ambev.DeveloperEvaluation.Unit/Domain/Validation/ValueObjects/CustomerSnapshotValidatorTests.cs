@@ -1,4 +1,6 @@
-﻿using Ambev.DeveloperEvaluation.Domain.ValueObjects;
+﻿using System;
+using Ambev.DeveloperEvaluation.Domain.ValueObjects;
+using FluentValidation;
 using Xunit;
 
 namespace Ambev.DeveloperEvaluation.Unit.Domain.Validation.ValueObjects
@@ -12,72 +14,60 @@ namespace Ambev.DeveloperEvaluation.Unit.Domain.Validation.ValueObjects
         /// Given a valid CustomerSnapshot, it should pass validation without errors.
         /// </summary>
         [Fact]
-        public void Given_ValidCustomerSnapshot_When_Validated_Then_ShouldBeValid()
+        public void Given_ValidCustomerSnapshot_When_Validated_Then_ShouldNotThrow()
         {
             // Arrange
             var customerId = Guid.NewGuid();
             var customerName = "Valid Customer";
 
-            // Creating a valid CustomerSnapshot.
-            var customerSnapshot = CustomerSnapshot.Create(customerId, customerName);
-
-            // Act
-            var validationResult = customerSnapshot.Validate();
-
-            // Assert
-            Assert.True(validationResult.IsValid); // Should be valid
-            Assert.Empty(validationResult.Errors); // Should not have any validation errors
+            // Act & Assert
+            var ex = Record.Exception(() => CustomerSnapshot.Create(customerId, customerName));
+            Assert.Null(ex);
         }
 
         /// <summary>
-        /// Given an empty CustomerId, it should result in a validation error.
+        /// Given an empty CustomerId, it should result in a validation exception.
         /// </summary>
         [Fact]
-        public void Given_EmptyCustomerId_When_Validated_Then_ShouldHaveValidationError()
+        public void Given_EmptyCustomerId_When_Validated_Then_ShouldThrowValidationException()
         {
             // Arrange
-            var customerSnapshot = CustomerSnapshot.Create(Guid.Empty, "Valid Customer");
+            var customerId = Guid.Empty;
+            var customerName = "Valid Customer";
 
-            // Act
-            var validationResult = customerSnapshot.Validate();
-
-            // Assert
-            Assert.False(validationResult.IsValid); // Should be invalid
-            Assert.Contains(validationResult.Errors, e => e.Detail == "Customer Id cannot be empty");
+            // Act & Assert
+            var ex = Assert.Throws<ValidationException>(() => CustomerSnapshot.Create(customerId, customerName));
+            Assert.Contains("Customer Id cannot be empty", ex.Message);
         }
 
         /// <summary>
-        /// Given an empty CustomerName, it should result in a validation error.
+        /// Given an empty CustomerName, it should result in a validation exception.
         /// </summary>
         [Fact]
-        public void Given_EmptyCustomerName_When_Validated_Then_ShouldHaveValidationError()
+        public void Given_EmptyCustomerName_When_Validated_Then_ShouldThrowValidationException()
         {
             // Arrange
-            var customerSnapshot = CustomerSnapshot.Create(Guid.NewGuid(), "");
+            var customerId = Guid.NewGuid();
+            var customerName = string.Empty;
 
-            // Act
-            var validationResult = customerSnapshot.Validate();
-
-            // Assert
-            Assert.False(validationResult.IsValid); // Should be invalid
-            Assert.Contains(validationResult.Errors, e => e.Detail == "Customer Name cannot be empty");
+            // Act & Assert
+            var ex = Assert.Throws<ValidationException>(() => CustomerSnapshot.Create(customerId, customerName));
+            Assert.Contains("Customer Name cannot be empty", ex.Message);
         }
 
         /// <summary>
-        /// Given a CustomerName with only whitespace, it should result in a validation error.
+        /// Given a CustomerName with only whitespace, it should result in a validation exception.
         /// </summary>
         [Fact]
-        public void Given_WhitespaceCustomerName_When_Validated_Then_ShouldHaveValidationError()
+        public void Given_WhitespaceCustomerName_When_Validated_Then_ShouldThrowValidationException()
         {
             // Arrange
-            var customerSnapshot = CustomerSnapshot.Create(Guid.NewGuid(), "   ");
+            var customerId = Guid.NewGuid();
+            var customerName = "   ";
 
-            // Act
-            var validationResult = customerSnapshot.Validate();
-
-            // Assert
-            Assert.False(validationResult.IsValid); // Should be invalid
-            Assert.Contains(validationResult.Errors, e => e.Detail == "Customer Name cannot be empty");
+            // Act & Assert
+            var ex = Assert.Throws<ValidationException>(() => CustomerSnapshot.Create(customerId, customerName));
+            Assert.Contains("Customer Name cannot be empty", ex.Message);
         }
     }
 }

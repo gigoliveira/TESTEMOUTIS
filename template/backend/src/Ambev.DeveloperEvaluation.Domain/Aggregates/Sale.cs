@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Ambev.DeveloperEvaluation.Domain.Enums;
+﻿using Ambev.DeveloperEvaluation.Domain.Enums;
 
 namespace Ambev.DeveloperEvaluation.Domain.Aggregates
 {
@@ -11,15 +6,17 @@ namespace Ambev.DeveloperEvaluation.Domain.Aggregates
     {
         public Guid Id { get; }
         public Guid CustomerId { get; }
+        public Guid BranchId { get; }
         public List<SaleItem> Items { get; private set; }
         public SaleStatus Status { get; private set; }
 
-        public Sale(Guid customerId)
+        public Sale(Guid customerId, Guid branchId)
         {
             Id = Guid.NewGuid();
             CustomerId = customerId;
             Items = new List<SaleItem>();
             Status = SaleStatus.Pending;
+            BranchId = branchId;
         }
 
         public void AddItem(SaleItem item)
@@ -41,6 +38,22 @@ namespace Ambev.DeveloperEvaluation.Domain.Aggregates
 
             Status = SaleStatus.Cancelled;
         }
+
+        /// <summary>
+        /// Finalizes the sale, setting its status to <see cref="SaleStatus.Completed"/>.
+        /// Throws an exception if the sale has no items.
+        /// </summary>
+        /// <exception cref="InvalidOperationException">Thrown when attempting to finalize a sale without items.</exception>
+        public void Finalize()
+        {
+            if (Items == null || Items.Count == 0)
+            {
+                throw new InvalidOperationException("Cannot finalize a sale with no items.");
+            }
+
+            Status = SaleStatus.Completed;
+        }
+
     }
 }
 

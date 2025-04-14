@@ -1,6 +1,7 @@
 ﻿using System;
 using Ambev.DeveloperEvaluation.Common.Validation;
 using Ambev.DeveloperEvaluation.Domain.Validation.CustomerSnapshotValidations;
+using FluentValidation;
 
 namespace Ambev.DeveloperEvaluation.Domain.ValueObjects
 {
@@ -35,6 +36,7 @@ namespace Ambev.DeveloperEvaluation.Domain.ValueObjects
         {
             ExternalCustomerId = externalCustomerId;
             Name = customerName;
+            this.Validate();
         }
 
         /// <summary>
@@ -47,7 +49,7 @@ namespace Ambev.DeveloperEvaluation.Domain.ValueObjects
         public static CustomerSnapshot Create(Guid externalCustomerId, string customerName)
         {
             var customerSnapshot = new CustomerSnapshot(externalCustomerId, customerName);
-            customerSnapshot.Validate(); // Validates using the specified rules
+            customerSnapshot.Validate();
 
             return customerSnapshot;
         }
@@ -57,15 +59,16 @@ namespace Ambev.DeveloperEvaluation.Domain.ValueObjects
         /// Uses the CustomerSnapshotValidator to check if the customer data is valid.
         /// </summary>
         /// <returns>A validation result containing errors, if any.</returns>
-        public ValidationResultDetail Validate()
+        public void Validate()
         {
             var validator = new CustomerSnapshotValidator();
             var result = validator.Validate(this);
-            return new ValidationResultDetail
+
+            if (!result.IsValid)
             {
-                IsValid = result.IsValid,
-                Errors = result.Errors.Select(o => (ValidationErrorDetail)o)
-            };
+                var errorMessages = string.Join("; ", result.Errors.Select(e => e.ErrorMessage));
+                throw new ValidationException($"Validation failed: {errorMessages}");
+            }
         }
     }
 }

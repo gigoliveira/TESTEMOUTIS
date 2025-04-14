@@ -2,6 +2,7 @@
 using Ambev.DeveloperEvaluation.Common.Validation;
 using Ambev.DeveloperEvaluation.Domain.Validation.BranchSnapshotValidations;
 using Ambev.DeveloperEvaluation.Domain.Validation.CustomerSnapshotValidations;
+using FluentValidation;
 
 namespace Ambev.DeveloperEvaluation.Domain.ValueObjects
 {
@@ -29,6 +30,7 @@ namespace Ambev.DeveloperEvaluation.Domain.ValueObjects
         {
             ExternalBranchId = externalBranchId;
             BranchName = branchName;
+            this.Validate();
         }
 
         /// <summary>
@@ -49,20 +51,17 @@ namespace Ambev.DeveloperEvaluation.Domain.ValueObjects
         /// Validates the current instance of <see cref="BranchSnapshot"/>.
         /// </summary>
         /// <returns>A validation result indicating whether the object is valid or not.</returns>
-        public ValidationResultDetail Validate()
+        public void Validate()
         {
             var validator = new BranchSnapshotValidator();
 
             var result = validator.Validate(this);
 
-            return new ValidationResultDetail
+            if (!result.IsValid)
             {
-                IsValid = result.IsValid,
-                Errors = result.Errors.Select(e => new ValidationErrorDetail
-                {
-                    Detail = e.ErrorMessage
-                })
-            };
+                var errorMessages = string.Join("; ", result.Errors.Select(e => e.ErrorMessage));
+                throw new ValidationException($"Validation failed: {errorMessages}");
+            }
         }
 
     }

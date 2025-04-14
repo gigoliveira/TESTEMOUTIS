@@ -18,7 +18,7 @@ namespace Ambev.DeveloperEvaluation.Unit.Domain.Specifications
         public void Given_SaleWithItems_When_Validated_Then_ShouldPassSpecification()
         {
             // Arrange
-            var sale = new Sale(Guid.NewGuid());
+            var sale = new Sale(Guid.NewGuid(), Guid.NewGuid());
             var productSnapshot = new ProductSnapshot(Guid.NewGuid(), "Product Name", 10.00m);
             var saleItem = new SaleItem(productSnapshot, 1);
             sale.AddItem(saleItem);
@@ -38,7 +38,7 @@ namespace Ambev.DeveloperEvaluation.Unit.Domain.Specifications
         public void Given_SaleWithoutItems_When_Validated_Then_ShouldFailSpecification()
         {
             // Arrange
-            var sale = new Sale(Guid.NewGuid());
+            var sale = new Sale(Guid.NewGuid(), Guid.NewGuid());
             var specification = new HasItemsSaleSpecification();
 
             // Act

@@ -21,7 +21,7 @@ namespace Ambev.DeveloperEvaluation.Unit.Domain.Validation.Aggregates
         public void Given_ValidSale_When_Validated_Then_ShouldPassValidation()
         {
             // Arrange
-            var sale = new Sale(Guid.NewGuid());
+            var sale = new Sale(Guid.NewGuid(), Guid.NewGuid());
             sale.AddItem(new SaleItem(new ProductSnapshot(Guid.NewGuid(), "Product A", 100), 2));
             var validator = new SaleValidator();
 
@@ -36,7 +36,7 @@ namespace Ambev.DeveloperEvaluation.Unit.Domain.Validation.Aggregates
         public void Given_SaleWithoutItems_When_Validated_Then_ShouldThrowValidationException()
         {
             // Arrange
-            var sale = new Sale(Guid.NewGuid());
+            var sale = new Sale(Guid.NewGuid(), Guid.NewGuid());
             var validator = new SaleValidator();
 
             // Act & Assert

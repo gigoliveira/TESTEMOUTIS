@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Ambev.DeveloperEvaluation.Common.Validation;
 using Ambev.DeveloperEvaluation.Domain.Validation.ProductSnapshotValidations;
+using FluentValidation;
 
 namespace Ambev.DeveloperEvaluation.Domain.ValueObjects
 {
@@ -23,6 +24,7 @@ namespace Ambev.DeveloperEvaluation.Domain.ValueObjects
             ExternalProductId = externalProductId;
             ProductName = productName;
             Price = price;
+            this.Validate();
         }
         public static ProductSnapshot Create(Guid externalProductId, string productName, decimal price)
         {
@@ -32,15 +34,16 @@ namespace Ambev.DeveloperEvaluation.Domain.ValueObjects
             return productSnapshot;
         }
 
-        public ValidationResultDetail Validate()
+        public void Validate()
         {
             var validator = new ProductSnapshotValidator();
             var result = validator.Validate(this);
-            return new ValidationResultDetail
+
+            if (!result.IsValid)
             {
-                IsValid = result.IsValid,
-                Errors = result.Errors.Select(o => (ValidationErrorDetail)o)
-            };
+                var errorMessages = string.Join("; ", result.Errors.Select(e => e.ErrorMessage));
+                throw new ValidationException($"Validation failed: {errorMessages}");
+            }
         }
     }
 }
