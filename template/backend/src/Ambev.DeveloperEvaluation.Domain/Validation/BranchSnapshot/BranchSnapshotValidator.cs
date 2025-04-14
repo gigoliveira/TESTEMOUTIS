@@ -1,16 +1,24 @@
-﻿using Ambev.DeveloperEvaluation.Domain.ValueObjects;
-using FluentValidation;
+﻿using FluentValidation;
+using Ambev.DeveloperEvaluation.Domain.ValueObjects;
 
-namespace Ambev.DeveloperEvaluation.Domain.Validation.CustomerSnapshotValidations
+namespace Ambev.DeveloperEvaluation.Domain.Validation.BranchSnapshotValidations
 {
-    public class BranchSnapshotValidator
+    /// <summary>
+    /// Validator for <see cref="BranchSnapshot"/>.
+    /// </summary>
+    public class BranchSnapshotValidator : AbstractValidator<BranchSnapshot>
     {
-        public void ValidateAndThrow(BranchSnapshot snapshot)
+        public BranchSnapshotValidator()
         {
-            if (string.IsNullOrWhiteSpace(snapshot.Name))
-            {
-                throw new ValidationException("Branch name cannot be empty.");
-            }
+            // Ensure that the external branch ID is not empty.
+            RuleFor(b => b.ExternalBranchId)
+                .NotEqual(Guid.Empty).WithMessage("Branch Id cannot be empty");
+
+            // Ensure that the branch name is not empty or whitespace.
+            RuleFor(b => b.BranchName)
+                .NotEmpty().WithMessage("Branch Name cannot be empty")
+                .NotNull().WithMessage("Branch Name cannot be null")
+                .Matches(@"^\S.*\S$").WithMessage("Branch Name cannot be just whitespace");
         }
     }
 }

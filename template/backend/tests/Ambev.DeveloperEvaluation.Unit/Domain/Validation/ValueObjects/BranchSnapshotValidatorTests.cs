@@ -1,47 +1,83 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Ambev.DeveloperEvaluation.Domain.Validation.CustomerSnapshotValidations;
 using Ambev.DeveloperEvaluation.Domain.ValueObjects;
-using FluentValidation;
 using Xunit;
 
 namespace Ambev.DeveloperEvaluation.Unit.Domain.Validation.ValueObjects
 {
+    /// <summary>
+    /// Unit tests for validating the <see cref="BranchSnapshot"/> value object.
+    /// </summary>
     public class BranchSnapshotValidatorTests
     {
-        // Given a valid branch
-        // When validated
-        // Then should pass validation
+        /// <summary>
+        /// Test to validate if a valid BranchSnapshot passes validation.
+        /// </summary>
         [Fact]
-        public void Given_ValidBranch_When_Validated_Then_ShouldPassValidation()
+        public void Given_ValidBranchSnapshot_When_Validated_Then_ShouldBeValid()
         {
             // Arrange
-            var snapshot = new BranchSnapshot(Guid.NewGuid(), "Valid Branch");
+            var branchId = Guid.NewGuid();
+            var branchName = "Valid Branch";
+
+            var branchSnapshot = BranchSnapshot.Create(branchId, branchName);
 
             // Act
-            var validator = new BranchSnapshotValidator();
+            var validationResult = branchSnapshot.Validate();
 
             // Assert
-            validator.ValidateAndThrow(snapshot);
+            Assert.True(validationResult.IsValid);
+            Assert.Empty(validationResult.Errors);
         }
 
-        // Given an invalid branch name (empty)
-        // When validated
-        // Then should throw ValidationException
+        /// <summary>
+        /// Test to validate that an empty ExternalBranchId throws a validation error.
+        /// </summary>
         [Fact]
-        public void Given_InvalidBranchName_When_Validated_Then_ShouldThrowValidationException()
+        public void Given_EmptyBranchId_When_Validated_Then_ShouldHaveValidationError()
         {
             // Arrange
-            var snapshot = new BranchSnapshot(Guid.NewGuid(), string.Empty);
+            var branchSnapshot = BranchSnapshot.Create(Guid.Empty, "Valid Branch");
 
             // Act
-            var validator = new BranchSnapshotValidator();
+            var validationResult = branchSnapshot.Validate();
 
             // Assert
-            Assert.Throws<ValidationException>(() => validator.ValidateAndThrow(snapshot));
+            Assert.False(validationResult.IsValid);
+            Assert.Contains(validationResult.Errors, e => e.Detail == "Branch Id cannot be empty");
+        }
+
+        /// <summary>
+        /// Test to validate that an empty BranchName throws a validation error.
+        /// </summary>
+        [Fact]
+        public void Given_EmptyBranchName_When_Validated_Then_ShouldHaveValidationError()
+        {
+            // Arrange
+            var branchSnapshot = BranchSnapshot.Create(Guid.NewGuid(), "");
+
+            // Act
+            var validationResult = branchSnapshot.Validate();
+
+            // Assert
+            Assert.False(validationResult.IsValid);
+            Assert.Contains(validationResult.Errors, e => e.Detail == "Branch Name cannot be empty");
+        }
+
+        /// <summary>
+        /// Test to validate that a whitespace-only BranchName throws a validation error.
+        /// </summary>
+        [Fact]
+        public void Given_WhitespaceBranchName_When_Validated_Then_ShouldHaveValidationError()
+        {
+            // Arrange
+            var branchSnapshot = BranchSnapshot.Create(Guid.NewGuid(), "   ");
+
+            // Act
+            var validationResult = branchSnapshot.Validate();
+
+            // Assert
+            Assert.False(validationResult.IsValid);
+            Assert.Contains(validationResult.Errors, e => e.Detail == "Branch Name cannot be just whitespace");
         }
     }
 }
