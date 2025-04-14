@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Ambev.DeveloperEvaluation.Common.Validation;
+using Ambev.DeveloperEvaluation.Domain.Validation.ProductSnapshotValidations;
 
 namespace Ambev.DeveloperEvaluation.Domain.ValueObjects
 {
@@ -21,6 +23,24 @@ namespace Ambev.DeveloperEvaluation.Domain.ValueObjects
             ExternalProductId = externalProductId;
             ProductName = productName;
             Price = price;
+        }
+        public static ProductSnapshot Create(Guid externalProductId, string productName, decimal price)
+        {
+            var productSnapshot = new ProductSnapshot(externalProductId, productName, price);
+            productSnapshot.Validate(); 
+
+            return productSnapshot;
+        }
+
+        public ValidationResultDetail Validate()
+        {
+            var validator = new ProductSnapshotValidator();
+            var result = validator.Validate(this);
+            return new ValidationResultDetail
+            {
+                IsValid = result.IsValid,
+                Errors = result.Errors.Select(o => (ValidationErrorDetail)o)
+            };
         }
     }
 }

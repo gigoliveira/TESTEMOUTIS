@@ -6,14 +6,6 @@
 
 		<IsPackable>false</IsPackable>
 	</PropertyGroup>
-	<ItemGroup>
-	  <Compile Remove="Domain\NovaPasta\**" />
-	  <Compile Remove="Domain\ValueObjects\**" />
-	  <EmbeddedResource Remove="Domain\NovaPasta\**" />
-	  <EmbeddedResource Remove="Domain\ValueObjects\**" />
-	  <None Remove="Domain\NovaPasta\**" />
-	  <None Remove="Domain\ValueObjects\**" />
-	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />

@@ -1,62 +1,98 @@
 ﻿using System;
-using Xunit;
-using FluentAssertions;
+using System.Linq;
 using Ambev.DeveloperEvaluation.Domain.ValueObjects;
-using Ambev.DeveloperEvaluation.Domain.Validation.ProductSnapshotValidations;
-using System.ComponentModel.DataAnnotations;
-using Ambev.DeveloperEvaluation.Unit.Domain.Validation.ValueObjects.TestData;
+using Xunit;
 
 namespace Ambev.DeveloperEvaluation.Unit.Domain.Validation.ValueObjects
 {
     public class ProductSnapshotValidatorTests
     {
-        private readonly ProductSnapshotValidator _validator;
-
-        public ProductSnapshotValidatorTests()
+        [Fact]
+        public void Given_ValidProductSnapshot_When_Validated_Then_ShouldBeValid()
         {
-            _validator = new ProductSnapshotValidator();
+            // Arrange
+            var productId = Guid.NewGuid();
+            var productName = "Valid Product";
+            var price = 10m;
+
+            var productSnapshot = ProductSnapshot.Create(productId, productName, price);
+
+            // Act
+            var validationResult = productSnapshot.Validate();
+
+            // Assert
+            Assert.True(validationResult.IsValid);
+            Assert.Empty(validationResult.Errors);
         }
 
         [Fact]
-        public void Given_ValidProduct_When_Validated_Then_ShouldPassValidation()
+        public void Given_EmptyProductId_When_Validated_Then_ShouldHaveValidationError()
         {
             // Arrange
-            var validProductSnapshot = ProductSnapshotValidatorTestData.GenerateValidProduct();
+            var productSnapshot = ProductSnapshot.Create(Guid.Empty, "Valid Product", 10m);
 
             // Act
-            var validationResult = _validator.Validate(validProductSnapshot);
+            var validationResult = productSnapshot.Validate();
 
             // Assert
-            validationResult.IsValid.Should().BeTrue();
+            Assert.False(validationResult.IsValid);
+            Assert.Contains(validationResult.Errors, e => e.Detail == "Product Id cannot be empty");
         }
 
         [Fact]
-        public void Given_InvalidProductPrice_When_Validated_Then_ShouldThrowValidationException()
+        public void Given_EmptyProductName_When_Validated_Then_ShouldHaveValidationError()
         {
             // Arrange
-            var invalidProductSnapshot = ProductSnapshotValidatorTestData.GenerateInvalidPriceProduct();
+            var productSnapshot = ProductSnapshot.Create(Guid.NewGuid(), "", 10m);
 
             // Act
-            var validationResult = _validator.Validate(invalidProductSnapshot);
+            var validationResult = productSnapshot.Validate();
 
             // Assert
-            validationResult.IsValid.Should().BeFalse();
-            validationResult.Errors.Should().ContainSingle(error => error.ErrorMessage == "Product Price must be greater than zero");
+            Assert.False(validationResult.IsValid);
+            Assert.Contains(validationResult.Errors, e => e.Detail == "Product Name cannot be empty");
         }
 
         [Fact]
-        public void Given_InvalidProductName_When_Validated_Then_ShouldThrowValidationException()
+        public void Given_WhitespaceProductName_When_Validated_Then_ShouldHaveValidationError()
         {
             // Arrange
-            var invalidProductSnapshot = new ProductSnapshot(Guid.NewGuid(), "", 100);
+            var productSnapshot = ProductSnapshot.Create(Guid.NewGuid(), "   ", 10m);
 
             // Act
-            var validationResult = _validator.Validate(invalidProductSnapshot);
+            var validationResult = productSnapshot.Validate();
 
             // Assert
-            validationResult.IsValid.Should().BeFalse();
-            validationResult.Errors.Should().ContainSingle(error => error.ErrorMessage == "Product Name cannot be empty");
+            Assert.False(validationResult.IsValid);
+            Assert.Contains(validationResult.Errors, e => e.Detail == "Product Name cannot be empty");
+        }
+
+        [Fact]
+        public void Given_ZeroPrice_When_Validated_Then_ShouldHaveValidationError()
+        {
+            // Arrange
+            var productSnapshot = ProductSnapshot.Create(Guid.NewGuid(), "Valid Product", 0m);
+
+            // Act
+            var validationResult = productSnapshot.Validate();
+
+            // Assert
+            Assert.False(validationResult.IsValid);
+            Assert.Contains(validationResult.Errors, e => e.Detail == "Product Price must be greater than zero");
+        }
+
+        [Fact]
+        public void Given_NegativePrice_When_Validated_Then_ShouldHaveValidationError()
+        {
+            // Arrange
+            var productSnapshot = ProductSnapshot.Create(Guid.NewGuid(), "Valid Product", -10m);
+
+            // Act
+            var validationResult = productSnapshot.Validate();
+
+            // Assert
+            Assert.False(validationResult.IsValid);
+            Assert.Contains(validationResult.Errors, e => e.Detail == "Product Price must be greater than zero");
         }
     }
 }
-
