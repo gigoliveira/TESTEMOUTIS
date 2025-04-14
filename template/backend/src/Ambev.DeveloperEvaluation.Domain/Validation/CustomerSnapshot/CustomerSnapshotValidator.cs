@@ -15,7 +15,7 @@ namespace Ambev.DeveloperEvaluation.Domain.Validation.CustomerSnapshotValidation
                 .NotEmpty().WithMessage("Customer Id cannot be empty");
 
             // Rule to ensure CustomerName is not empty or just whitespace.
-            RuleFor(x => x.Name)
+            RuleFor(x => x.CustomerName)
                 .NotEmpty().WithMessage("Customer Name cannot be empty")
                 .Matches(@"^\S.*$").WithMessage("Customer Name cannot be empty");
         }

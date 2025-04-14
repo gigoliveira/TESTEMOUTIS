@@ -18,7 +18,7 @@ namespace Ambev.DeveloperEvaluation.Domain.ValueObjects
         /// <summary>
         /// Gets the name of the customer.
         /// </summary>
-        public string Name { get; private set; }
+        public string CustomerName { get; private set; }
 
         /// <summary>
         /// Default constructor for CustomerSnapshot.
@@ -35,7 +35,7 @@ namespace Ambev.DeveloperEvaluation.Domain.ValueObjects
         public CustomerSnapshot(Guid externalCustomerId, string customerName)
         {
             ExternalCustomerId = externalCustomerId;
-            Name = customerName;
+            CustomerName = customerName;
             this.Validate();
         }
 

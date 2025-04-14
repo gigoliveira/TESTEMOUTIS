@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Ambev.DeveloperEvaluation.Domain.Aggregates;
 using Ambev.DeveloperEvaluation.Domain.Repositories;
+using Ambev.DeveloperEvaluation.Domain.ValueObjects;
 using NSubstitute;
 using Xunit;
 
@@ -23,7 +24,9 @@ namespace Ambev.DeveloperEvaluation.Unit.Domain.Repositories
         public ISaleRepositoryTests()
         {
             _repositoryMock = Substitute.For<ISaleRepository>();
-            _sale = new Sale(Guid.NewGuid(), Guid.NewGuid());
+            var customerSnapshot = new CustomerSnapshot(Guid.NewGuid(), "Customer Name");
+            var branchSnapshot = new BranchSnapshot(Guid.NewGuid(), "Branch Name");
+            _sale = new Sale(customerSnapshot, branchSnapshot);
         }
 
         /// <summary>
@@ -53,7 +56,7 @@ namespace Ambev.DeveloperEvaluation.Unit.Domain.Repositories
             var sales = new List<Sale>
             {
                 _sale,
-                new Sale(Guid.NewGuid(), Guid.NewGuid())
+                _sale
             };
 
             _repositoryMock.GetAllAsync().Returns(sales);

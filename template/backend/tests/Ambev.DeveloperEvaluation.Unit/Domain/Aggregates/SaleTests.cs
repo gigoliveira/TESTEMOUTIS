@@ -22,11 +22,11 @@ namespace Ambev.DeveloperEvaluation.Unit.Domain.Aggregates
             var branchSnapshot = new BranchSnapshot(Guid.NewGuid(), "Branch Name");
 
             // Act
-            var sale = new Sale(customerSnapshot.ExternalCustomerId, branchSnapshot.ExternalBranchId);
+            var sale = new Sale(customerSnapshot, branchSnapshot);
 
             // Assert
-            Assert.Equal(customerSnapshot.ExternalCustomerId, sale.CustomerId);
-            Assert.Equal(branchSnapshot.ExternalBranchId, sale.BranchId);
+            Assert.Equal(customerSnapshot.ExternalCustomerId, sale.Customer.ExternalCustomerId);
+            Assert.Equal(branchSnapshot.ExternalBranchId, sale.Branch.ExternalBranchId);
             Assert.NotEqual(Guid.Empty, sale.Id);
             Assert.Empty(sale.Items);
             Assert.Equal(SaleStatus.Pending, sale.Status);
@@ -38,7 +38,9 @@ namespace Ambev.DeveloperEvaluation.Unit.Domain.Aggregates
         public void Given_ValidItem_When_AddItem_Then_ShouldAddToItemsList()
         {
             // Arrange
-            var sale = new Sale(Guid.NewGuid(), Guid.NewGuid());
+            var customerSnapshot = new CustomerSnapshot(Guid.NewGuid(), "Customer Name");
+            var branchSnapshot = new BranchSnapshot(Guid.NewGuid(), "Branch Name");
+            var sale = new Sale(customerSnapshot, branchSnapshot);
             var productSnapshot = new ProductSnapshot(Guid.NewGuid(), "Product Name", 10.0m);
 
             // Act
@@ -49,7 +51,7 @@ namespace Ambev.DeveloperEvaluation.Unit.Domain.Aggregates
             Assert.Single(sale.Items);
             Assert.Equal(productSnapshot.ExternalProductId, sale.Items[0].Product.ExternalProductId);
             Assert.Equal(5, sale.Items[0].Quantity);
-            Assert.Equal(10.0m, sale.Items[0].Product.Price);
+            Assert.Equal(10.0m, sale.Items[0].Product.ProductPrice);
         }
 
         /// <summary>
@@ -59,7 +61,9 @@ namespace Ambev.DeveloperEvaluation.Unit.Domain.Aggregates
         public void Given_NoItems_When_FinalizingSale_Then_ShouldThrowInvalidOperationException()
         {
             // Arrange
-            var sale = new Sale(Guid.NewGuid(), Guid.NewGuid());
+            var customerSnapshot = new CustomerSnapshot(Guid.NewGuid(), "Customer Name");
+            var branchSnapshot = new BranchSnapshot(Guid.NewGuid(), "Branch Name");
+            var sale = new Sale(customerSnapshot, branchSnapshot);
 
             // Act & Assert
             Assert.Throws<InvalidOperationException>(() => sale.Finalize());
@@ -72,7 +76,9 @@ namespace Ambev.DeveloperEvaluation.Unit.Domain.Aggregates
         public void Given_Items_When_FinalizingSale_Then_ShouldSetStatusToCompleted()
         {
             // Arrange
-            var sale = new Sale(Guid.NewGuid(), Guid.NewGuid());
+            var customerSnapshot = new CustomerSnapshot(Guid.NewGuid(), "Customer Name");
+            var branchSnapshot = new BranchSnapshot(Guid.NewGuid(), "Branch Name");
+            var sale = new Sale(customerSnapshot, branchSnapshot);
             var productSnapshot = new ProductSnapshot(Guid.NewGuid(), "Product Name", 5.0m);
             var saleItem = new SaleItem(productSnapshot, 3);
             sale.AddItem(saleItem);
@@ -91,7 +97,9 @@ namespace Ambev.DeveloperEvaluation.Unit.Domain.Aggregates
         public void Given_FinalizedSale_When_Canceling_Then_ShouldThrowInvalidOperationException()
         {
             // Arrange
-            var sale = new Sale(Guid.NewGuid(), Guid.NewGuid());
+            var customerSnapshot = new CustomerSnapshot(Guid.NewGuid(), "Customer Name");
+            var branchSnapshot = new BranchSnapshot(Guid.NewGuid(), "Branch Name");
+            var sale = new Sale(customerSnapshot, branchSnapshot);
             var productSnapshot = new ProductSnapshot(Guid.NewGuid(), "Product Name", 15.0m);
             var saleItem = new SaleItem(productSnapshot, 2);
             sale.AddItem(saleItem);
@@ -108,7 +116,9 @@ namespace Ambev.DeveloperEvaluation.Unit.Domain.Aggregates
         public void Given_PendingSale_When_Canceling_Then_ShouldSetStatusToCanceled()
         {
             // Arrange
-            var sale = new Sale(Guid.NewGuid(), Guid.NewGuid());
+            var customerSnapshot = new CustomerSnapshot(Guid.NewGuid(), "Customer Name");
+            var branchSnapshot = new BranchSnapshot(Guid.NewGuid(), "Branch Name");
+            var sale = new Sale(customerSnapshot, branchSnapshot);
             var productSnapshot = new ProductSnapshot(Guid.NewGuid(), "Product Name", 20.0m);
             var saleItem = new SaleItem(productSnapshot, 1);
             sale.AddItem(saleItem);

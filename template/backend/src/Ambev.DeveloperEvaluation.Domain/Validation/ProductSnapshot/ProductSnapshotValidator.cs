@@ -13,7 +13,7 @@ namespace Ambev.DeveloperEvaluation.Domain.Validation.ProductSnapshotValidations
             RuleFor(x => x.ProductName)
                 .NotEmpty().WithMessage("Product Name cannot be empty");
 
-            RuleFor(x => x.Price)
+            RuleFor(x => x.ProductPrice)
                 .GreaterThan(0).WithMessage("Product Price must be greater than zero");
         }
     }

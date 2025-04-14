@@ -22,7 +22,7 @@ namespace Ambev.DeveloperEvaluation.Unit.Domain.ValueObjects
             var snapshot = CustomerSnapshot.Create(externalCustomerId, customerName);
 
             Assert.Equal(externalCustomerId, snapshot.ExternalCustomerId);
-            Assert.Equal(customerName, snapshot.Name);
+            Assert.Equal(customerName, snapshot.CustomerName);
         }
 
         /// <summary>

@@ -27,7 +27,7 @@ namespace Ambev.DeveloperEvaluation.Unit.Domain.ValueObjects
             // Assert
             Assert.Equal(productId, snapshot.ExternalProductId);
             Assert.Equal(productName, snapshot.ProductName);
-            Assert.Equal(price, snapshot.Price);
+            Assert.Equal(price, snapshot.ProductPrice);
         }
 
         /// <summary>

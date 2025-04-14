@@ -11,7 +11,7 @@ namespace Ambev.DeveloperEvaluation.Domain.Specifications
     {
         public bool IsSatisfiedBy(SaleItem saleItem)
         {
-            return saleItem.Product.Price > 0;
+            return saleItem.Product.ProductPrice > 0;
         }
     }
 }

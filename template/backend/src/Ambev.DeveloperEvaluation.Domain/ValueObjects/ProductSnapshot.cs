@@ -13,7 +13,7 @@ namespace Ambev.DeveloperEvaluation.Domain.ValueObjects
     {
         public Guid ExternalProductId { get; private set; }
         public string ProductName { get; private set; }
-        public decimal Price { get; private set; }
+        public decimal ProductPrice { get; private set; }
 
         public ProductSnapshot()
         {
@@ -23,7 +23,7 @@ namespace Ambev.DeveloperEvaluation.Domain.ValueObjects
         {
             ExternalProductId = externalProductId;
             ProductName = productName;
-            Price = price;
+            ProductPrice = price;
             this.Validate();
         }
         public static ProductSnapshot Create(Guid externalProductId, string productName, decimal price)

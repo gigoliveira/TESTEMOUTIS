@@ -13,7 +13,7 @@ namespace Ambev.DeveloperEvaluation.Unit.Domain.Validation.ValueObjects.TestData
         private static readonly Faker<ProductSnapshot> ProductFaker = new Faker<ProductSnapshot>()
             .RuleFor(u => u.ExternalProductId, Guid.NewGuid())
             .RuleFor(u => u.ProductName, f => f.Commerce.ProductName())
-            .RuleFor(u => u.Price, f => f.Finance.Amount(0.01m, 10000.00m));
+            .RuleFor(u => u.ProductPrice, f => f.Finance.Amount(0.01m, 10000.00m));
 
         public static ProductSnapshot GenerateValidProduct()
         {
@@ -23,7 +23,7 @@ namespace Ambev.DeveloperEvaluation.Unit.Domain.Validation.ValueObjects.TestData
         public static ProductSnapshot GenerateInvalidPriceProduct()
         {
             return ProductFaker.Clone()
-                .RuleFor(u => u.Price, -1)
+                .RuleFor(u => u.ProductPrice, -1)
                 .Generate();
         }
 

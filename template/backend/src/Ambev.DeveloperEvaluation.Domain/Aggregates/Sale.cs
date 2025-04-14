@@ -1,22 +1,24 @@
-﻿using Ambev.DeveloperEvaluation.Domain.Enums;
+﻿using Ambev.DeveloperEvaluation.Domain.Common;
+using Ambev.DeveloperEvaluation.Domain.Enums;
+using Ambev.DeveloperEvaluation.Domain.ValueObjects;
 
 namespace Ambev.DeveloperEvaluation.Domain.Aggregates
 {
-    public class Sale
+    public class Sale : BaseEntity
     {
-        public Guid Id { get; }
-        public Guid CustomerId { get; }
-        public Guid BranchId { get; }
-        public List<SaleItem> Items { get; private set; }
-        public SaleStatus Status { get; private set; }
+        public CustomerSnapshot Customer { get; set; }
+        public BranchSnapshot Branch { get; set; }
+        public List<SaleItem> Items { get; set; }
+        public SaleStatus Status { get; set; }
 
-        public Sale(Guid customerId, Guid branchId)
+        protected Sale() { }
+        public Sale(CustomerSnapshot customer, BranchSnapshot branch)
         {
             Id = Guid.NewGuid();
-            CustomerId = customerId;
+            Customer = customer;
             Items = new List<SaleItem>();
             Status = SaleStatus.Pending;
-            BranchId = branchId;
+            Branch = branch;
         }
 
         public void AddItem(SaleItem item)

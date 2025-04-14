@@ -2,6 +2,7 @@
 using Ambev.DeveloperEvaluation.Domain.Aggregates;
 using Ambev.DeveloperEvaluation.Domain.Enums;
 using Ambev.DeveloperEvaluation.Domain.Specifications;
+using Ambev.DeveloperEvaluation.Domain.ValueObjects;
 using Xunit;
 
 namespace Ambev.DeveloperEvaluation.Unit.Domain.Specifications
@@ -15,7 +16,9 @@ namespace Ambev.DeveloperEvaluation.Unit.Domain.Specifications
         public void Given_SaleWithValidStatus_When_Validated_Then_ShouldPassSpecification()
         {
             // Arrange
-            var sale = new Sale(Guid.NewGuid(), Guid.NewGuid());
+            var customerSnapshot = new CustomerSnapshot(Guid.NewGuid(), "Customer Name");
+            var branchSnapshot = new BranchSnapshot(Guid.NewGuid(), "Branch Name");
+            var sale = new Sale(customerSnapshot, branchSnapshot);
 
             // Act
             var specification = new ValidStatusSpecification();
@@ -32,7 +35,9 @@ namespace Ambev.DeveloperEvaluation.Unit.Domain.Specifications
         public void Given_SaleWithInvalidStatus_When_Validated_Then_ShouldFailSpecification()
         {
             // Arrange
-            var sale = new Sale(Guid.NewGuid(), Guid.NewGuid()); // assuming Cancelled is invalid for the example
+            var customerSnapshot = new CustomerSnapshot(Guid.NewGuid(), "Customer Name");
+            var branchSnapshot = new BranchSnapshot(Guid.NewGuid(), "Branch Name");
+            var sale = new Sale(customerSnapshot, branchSnapshot);
             sale.Cancel();
 
             // Act
