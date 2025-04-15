@@ -20,9 +20,9 @@ namespace Ambev.DeveloperEvaluation.Unit.Domain.Specifications
             // Arrange
             var customerSnapshot = new CustomerSnapshot(Guid.NewGuid(), "Customer Name");
             var branchSnapshot = new BranchSnapshot(Guid.NewGuid(), "Branch Name");
-            var sale = new Sale(customerSnapshot, branchSnapshot);
+            var sale = Sale.CreateSale(Guid.NewGuid(), customerSnapshot, branchSnapshot);
             var productSnapshot = new ProductSnapshot(Guid.NewGuid(), "Product Name", 10.00m);
-            var saleItem = new SaleItem(productSnapshot, 1);
+            var saleItem = SaleItem.CreateSaleItem(sale.Id, productSnapshot, 1);
             sale.AddItem(saleItem);
             var specification = new HasItemsSaleSpecification();
 
@@ -42,7 +42,7 @@ namespace Ambev.DeveloperEvaluation.Unit.Domain.Specifications
             // Arrange
             var customerSnapshot = new CustomerSnapshot(Guid.NewGuid(), "Customer Name");
             var branchSnapshot = new BranchSnapshot(Guid.NewGuid(), "Branch Name");
-            var sale = new Sale(customerSnapshot, branchSnapshot);
+            var sale = Sale.CreateSale(Guid.NewGuid(), customerSnapshot, branchSnapshot);
             var specification = new HasItemsSaleSpecification();
 
             // Act

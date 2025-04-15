@@ -8,16 +8,16 @@ namespace Ambev.DeveloperEvaluation.Domain.Policies
     {
         public decimal ApplyDiscount(SaleItem item)
         {
-            if (item.Quantity > 20)
+            if (item.Quantity <= 0)
                 throw new InvalidOperationException($"Cannot purchase more than 20 identical items for '{item.Product.ProductName}'.");
-
-            if (item.Quantity >= 10 && item.Quantity <= 20)
-                return item.TotalValue * 0.20m;
-
-            if (item.Quantity >= 4)
-                return item.TotalValue * 0.10m;
-
-            return 0m;
+            else if (item.Quantity > 20)
+                throw new InvalidOperationException($"Cannot purchase more than 20 identical items for '{item.Product.ProductName}'.");
+            else if (item.Quantity >= 10 && item.Quantity <= 20)
+                return item.Product.ProductPrice * 0.20m;
+            else if (item.Quantity >= 4)
+                return item.Product.ProductPrice * 0.10m;
+            else
+                return item.Product.ProductPrice;
         }
     }
 }

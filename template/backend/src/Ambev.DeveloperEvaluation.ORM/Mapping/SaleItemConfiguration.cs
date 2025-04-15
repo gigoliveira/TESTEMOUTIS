@@ -22,8 +22,16 @@ namespace Ambev.DeveloperEvaluation.ORM.Mapping
                 product.Property(p => p.ProductPrice).HasColumnName("ProductPrice");
             });
 
-            builder.Ignore(s => s.TotalValue); // <-- aqui resolve o erro
+            builder.Property(s => s.SaleId)
+                   .HasColumnName("SaleId")
+                   .IsRequired();
+
+            builder.HasOne<Sale>()
+                   .WithMany(s => s.Items)
+                   .HasForeignKey(s => s.SaleId);
+
+            builder.Ignore(s => s.TotalAmount);
         }
     }
-
 }
+

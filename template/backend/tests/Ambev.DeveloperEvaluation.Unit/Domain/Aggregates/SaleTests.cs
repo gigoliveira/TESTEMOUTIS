@@ -22,7 +22,7 @@ namespace Ambev.DeveloperEvaluation.Unit.Domain.Aggregates
             var branchSnapshot = new BranchSnapshot(Guid.NewGuid(), "Branch Name");
 
             // Act
-            var sale = new Sale(customerSnapshot, branchSnapshot);
+            var sale = Sale.CreateSale(Guid.NewGuid(), customerSnapshot, branchSnapshot);
 
             // Assert
             Assert.Equal(customerSnapshot.ExternalCustomerId, sale.Customer.ExternalCustomerId);
@@ -40,11 +40,11 @@ namespace Ambev.DeveloperEvaluation.Unit.Domain.Aggregates
             // Arrange
             var customerSnapshot = new CustomerSnapshot(Guid.NewGuid(), "Customer Name");
             var branchSnapshot = new BranchSnapshot(Guid.NewGuid(), "Branch Name");
-            var sale = new Sale(customerSnapshot, branchSnapshot);
+            var sale = Sale.CreateSale(Guid.NewGuid(), customerSnapshot, branchSnapshot);
             var productSnapshot = new ProductSnapshot(Guid.NewGuid(), "Product Name", 10.0m);
 
             // Act
-            var saleItem = new SaleItem(productSnapshot, 5);
+            var saleItem = SaleItem.CreateSaleItem(sale.Id, productSnapshot, 5);
             sale.AddItem(saleItem);
 
             // Assert
@@ -63,7 +63,7 @@ namespace Ambev.DeveloperEvaluation.Unit.Domain.Aggregates
             // Arrange
             var customerSnapshot = new CustomerSnapshot(Guid.NewGuid(), "Customer Name");
             var branchSnapshot = new BranchSnapshot(Guid.NewGuid(), "Branch Name");
-            var sale = new Sale(customerSnapshot, branchSnapshot);
+            var sale = Sale.CreateSale(Guid.NewGuid(), customerSnapshot, branchSnapshot);
 
             // Act & Assert
             Assert.Throws<InvalidOperationException>(() => sale.Finalize());
@@ -78,9 +78,9 @@ namespace Ambev.DeveloperEvaluation.Unit.Domain.Aggregates
             // Arrange
             var customerSnapshot = new CustomerSnapshot(Guid.NewGuid(), "Customer Name");
             var branchSnapshot = new BranchSnapshot(Guid.NewGuid(), "Branch Name");
-            var sale = new Sale(customerSnapshot, branchSnapshot);
+            var sale = Sale.CreateSale(Guid.NewGuid(), customerSnapshot, branchSnapshot);
             var productSnapshot = new ProductSnapshot(Guid.NewGuid(), "Product Name", 5.0m);
-            var saleItem = new SaleItem(productSnapshot, 3);
+            var saleItem = SaleItem.CreateSaleItem(sale.Id, productSnapshot, 3);
             sale.AddItem(saleItem);
 
             // Act
@@ -99,9 +99,9 @@ namespace Ambev.DeveloperEvaluation.Unit.Domain.Aggregates
             // Arrange
             var customerSnapshot = new CustomerSnapshot(Guid.NewGuid(), "Customer Name");
             var branchSnapshot = new BranchSnapshot(Guid.NewGuid(), "Branch Name");
-            var sale = new Sale(customerSnapshot, branchSnapshot);
+            var sale = Sale.CreateSale(Guid.NewGuid(), customerSnapshot, branchSnapshot);
             var productSnapshot = new ProductSnapshot(Guid.NewGuid(), "Product Name", 15.0m);
-            var saleItem = new SaleItem(productSnapshot, 2);
+            var saleItem = SaleItem.CreateSaleItem(sale.Id, productSnapshot, 2);
             sale.AddItem(saleItem);
             sale.Finalize();
 
@@ -118,9 +118,9 @@ namespace Ambev.DeveloperEvaluation.Unit.Domain.Aggregates
             // Arrange
             var customerSnapshot = new CustomerSnapshot(Guid.NewGuid(), "Customer Name");
             var branchSnapshot = new BranchSnapshot(Guid.NewGuid(), "Branch Name");
-            var sale = new Sale(customerSnapshot, branchSnapshot);
+            var sale = Sale.CreateSale(Guid.NewGuid(), customerSnapshot, branchSnapshot);
             var productSnapshot = new ProductSnapshot(Guid.NewGuid(), "Product Name", 20.0m);
-            var saleItem = new SaleItem(productSnapshot, 1);
+            var saleItem = SaleItem.CreateSaleItem(sale.Id, productSnapshot, 1);
             sale.AddItem(saleItem);
 
             // Act

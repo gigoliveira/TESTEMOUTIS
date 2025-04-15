@@ -27,18 +27,18 @@ namespace Ambev.DeveloperEvaluation.Domain.Repositories
         /// Adds a new sale to the repository.
         /// </summary>
         /// <param name="sale">The sale to be added.</param>
-        Task AddAsync(Sale sale);
+        Task<Sale> AddAsync(Sale sale);
 
         /// <summary>
         /// Updates an existing sale in the repository.
         /// </summary>
         /// <param name="sale">The sale to be updated.</param>
-        Task UpdateAsync(Sale sale);
+        Task<Sale> UpdateAsync(Sale sale);
 
         /// <summary>
         /// Deletes an existing sale from the repository.
         /// </summary>
         /// <param name="sale">The sale to be deleted.</param>
-        Task DeleteAsync(Sale sale);
+        Task<Sale> CancelAsync(Sale sale);
     }
 }

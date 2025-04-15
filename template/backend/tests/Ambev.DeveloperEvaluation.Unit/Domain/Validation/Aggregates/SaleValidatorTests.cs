@@ -23,8 +23,8 @@ namespace Ambev.DeveloperEvaluation.Unit.Domain.Validation.Aggregates
             // Arrange
             var customerSnapshot = new CustomerSnapshot(Guid.NewGuid(), "Customer Name");
             var branchSnapshot = new BranchSnapshot(Guid.NewGuid(), "Branch Name");
-            var sale = new Sale(customerSnapshot, branchSnapshot);
-            sale.AddItem(new SaleItem(new ProductSnapshot(Guid.NewGuid(), "Product A", 100), 2));
+            var sale = new Sale(Guid.NewGuid(), customerSnapshot, branchSnapshot);
+            sale.AddItem(SaleItem.CreateSaleItem(Guid.NewGuid(), new ProductSnapshot(Guid.NewGuid(), "Product A", 100), 2));
             var validator = new SaleValidator();
 
             // Act & Assert
@@ -40,7 +40,7 @@ namespace Ambev.DeveloperEvaluation.Unit.Domain.Validation.Aggregates
             // Arrange
             var customerSnapshot = new CustomerSnapshot(Guid.NewGuid(), "Customer Name");
             var branchSnapshot = new BranchSnapshot(Guid.NewGuid(), "Branch Name");
-            var sale = new Sale(customerSnapshot, branchSnapshot);
+            var sale = new Sale(Guid.NewGuid(), customerSnapshot, branchSnapshot);
             var validator = new SaleValidator();
 
             // Act & Assert

@@ -1,4 +1,5 @@
 ﻿using Ambev.DeveloperEvaluation.Domain.Aggregates;
+using Ambev.DeveloperEvaluation.Domain.Enums;
 using Ambev.DeveloperEvaluation.Domain.Repositories;
 using Microsoft.EntityFrameworkCore;
 
@@ -23,22 +24,27 @@ namespace Ambev.DeveloperEvaluation.ORM.Repositories
             return await _context.Sales.ToListAsync();
         }
 
-        public async Task AddAsync(Sale sale)
+        public async Task<Sale> AddAsync(Sale sale)
         {
             await _context.Sales.AddAsync(sale);
             await _context.SaveChangesAsync();
+            return sale;
+
         }
 
-        public async Task UpdateAsync(Sale sale)
+        public async Task<Sale> UpdateAsync(Sale sale)
         {
             _context.Sales.Update(sale);
             await _context.SaveChangesAsync();
+            return sale;
         }
 
-        public async Task DeleteAsync(Sale sale)
+        public async Task<Sale> CancelAsync(Sale sale)
         {
-            _context.Sales.Remove(sale);
+            sale.Status = SaleStatus.Cancelled;
+            _context.Sales.Update(sale);
             await _context.SaveChangesAsync();
+            return sale;
         }
     }
 }

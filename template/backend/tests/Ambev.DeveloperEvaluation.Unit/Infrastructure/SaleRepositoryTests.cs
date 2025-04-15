@@ -34,7 +34,7 @@ namespace Ambev.DeveloperEvaluation.Unit.Infrastructure
         public async Task Given_ExistingSale_When_GetById_Then_ShouldReturnSale()
         {
             // Arrange
-            var sale = new Sale(new CustomerSnapshot(Guid.NewGuid(), "Customer"), new BranchSnapshot(Guid.NewGuid(), "Branch"));
+            var sale = Sale.CreateSale(Guid.NewGuid(), new CustomerSnapshot(Guid.NewGuid(), "Customer"), new BranchSnapshot(Guid.NewGuid(), "Branch"));
             await _dbContext.Sales.AddAsync(sale);
             await _dbContext.SaveChangesAsync();
 
@@ -53,7 +53,7 @@ namespace Ambev.DeveloperEvaluation.Unit.Infrastructure
         public async Task Given_NewSale_When_Added_Then_ShouldPersist()
         {
             // Arrange
-            var sale = new Sale(new CustomerSnapshot(Guid.NewGuid(), "Customer"), new BranchSnapshot(Guid.NewGuid(), "Branch"));
+            var sale = Sale.CreateSale(Guid.NewGuid(), new CustomerSnapshot(Guid.NewGuid(), "Customer"), new BranchSnapshot(Guid.NewGuid(), "Branch"));
 
             // Act
             await _saleRepository.AddAsync(sale);
@@ -71,7 +71,7 @@ namespace Ambev.DeveloperEvaluation.Unit.Infrastructure
         public async Task Given_ExistingSale_When_Updated_Then_ShouldPersistChanges()
         {
             // Arrange
-            var sale = new Sale(new CustomerSnapshot(Guid.NewGuid(), "Customer"), new BranchSnapshot(Guid.NewGuid(), "Branch"));
+            var sale = Sale.CreateSale(Guid.NewGuid(), new CustomerSnapshot(Guid.NewGuid(), "Customer"), new BranchSnapshot(Guid.NewGuid(), "Branch"));
             await _dbContext.Sales.AddAsync(sale);
             await _dbContext.SaveChangesAsync();
 
@@ -89,20 +89,20 @@ namespace Ambev.DeveloperEvaluation.Unit.Infrastructure
         /// Given an existing sale, when DeleteAsync is called, then it should remove the sale from the database.
         /// </summary>
         [Fact]
-        public async Task Given_ExistingSale_When_Deleted_Then_ShouldRemoveFromDatabase()
+        public async Task Given_ExistingSale_When_Deleted_Then_ShouldCancel()
         {
             // Arrange
-            var sale = new Sale(new CustomerSnapshot(Guid.NewGuid(), "Customer"), new BranchSnapshot(Guid.NewGuid(), "Branch"));
+            var sale = Sale.CreateSale(Guid.NewGuid(), new CustomerSnapshot(Guid.NewGuid(), "Customer"), new BranchSnapshot(Guid.NewGuid(), "Branch"));
             await _dbContext.Sales.AddAsync(sale);
             await _dbContext.SaveChangesAsync();
 
             // Act
-            await _saleRepository.DeleteAsync(sale);
+            await _saleRepository.CancelAsync(sale);
             await _dbContext.SaveChangesAsync();
 
             // Assert
-            var deletedSale = await _dbContext.Sales.FindAsync(sale.Id);
-            Assert.Null(deletedSale);
+            var canceledSale = await _dbContext.Sales.FindAsync(sale.Id);
+            Assert.Equal(canceledSale.Status, SaleStatus.Cancelled);
         }
 
         /// <summary>

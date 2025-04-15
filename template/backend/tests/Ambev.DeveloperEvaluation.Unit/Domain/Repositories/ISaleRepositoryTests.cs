@@ -26,7 +26,7 @@ namespace Ambev.DeveloperEvaluation.Unit.Domain.Repositories
             _repositoryMock = Substitute.For<ISaleRepository>();
             var customerSnapshot = new CustomerSnapshot(Guid.NewGuid(), "Customer Name");
             var branchSnapshot = new BranchSnapshot(Guid.NewGuid(), "Branch Name");
-            _sale = new Sale(customerSnapshot, branchSnapshot);
+            _sale = Sale.CreateSale(Guid.NewGuid(), customerSnapshot, branchSnapshot);
         }
 
         /// <summary>
@@ -102,10 +102,10 @@ namespace Ambev.DeveloperEvaluation.Unit.Domain.Repositories
         public async Task Given_Sale_When_DeleteAsyncCalled_Then_ShouldCallRepositoryDelete()
         {
             // Act
-            await _repositoryMock.DeleteAsync(_sale);
+            await _repositoryMock.CancelAsync(_sale);
 
             // Assert
-            await _repositoryMock.Received(1).DeleteAsync(_sale);
+            await _repositoryMock.Received(1).CancelAsync(_sale);
         }
     }
 }

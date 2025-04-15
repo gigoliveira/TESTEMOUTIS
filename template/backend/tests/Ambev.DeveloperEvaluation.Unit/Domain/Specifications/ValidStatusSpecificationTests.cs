@@ -18,7 +18,7 @@ namespace Ambev.DeveloperEvaluation.Unit.Domain.Specifications
             // Arrange
             var customerSnapshot = new CustomerSnapshot(Guid.NewGuid(), "Customer Name");
             var branchSnapshot = new BranchSnapshot(Guid.NewGuid(), "Branch Name");
-            var sale = new Sale(customerSnapshot, branchSnapshot);
+            var sale = Sale.CreateSale(Guid.NewGuid(), customerSnapshot, branchSnapshot);
 
             // Act
             var specification = new ValidStatusSpecification();
@@ -37,7 +37,7 @@ namespace Ambev.DeveloperEvaluation.Unit.Domain.Specifications
             // Arrange
             var customerSnapshot = new CustomerSnapshot(Guid.NewGuid(), "Customer Name");
             var branchSnapshot = new BranchSnapshot(Guid.NewGuid(), "Branch Name");
-            var sale = new Sale(customerSnapshot, branchSnapshot);
+            var sale = Sale.CreateSale(Guid.NewGuid(), customerSnapshot, branchSnapshot);
             sale.Cancel();
 
             // Act
